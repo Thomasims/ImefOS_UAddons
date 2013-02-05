@@ -1,0 +1,9 @@
+#%TOOLS%#
+colorConsole
+console
+DDButton
+EventBox
+viewZone
+#%APPS%#
+TTUpdater.app
+IRC.app

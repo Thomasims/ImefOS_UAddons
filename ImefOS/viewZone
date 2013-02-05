@@ -1,0 +1,23 @@
+local viewZone = {
+  display = function(self)
+    for i = 1, #self.t do
+      self.t[i]:display()
+    end
+  end,
+  
+  update = function(self, e, a1, a2, a3)
+    return true
+  end
+}
+
+local view_mt = {
+  __index = viewZone,
+}
+
+function new(t)
+  local a = {
+    t = t or nil,
+  }
+  setmetatable(a, app_mt)
+  return a
+end

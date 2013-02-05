@@ -1,0 +1,68 @@
+local DDbutton = {
+
+  isInButton = function(self, x, y)
+    return self.y == y and x >= self.x and x < self.x + self.str:len()
+  end,
+
+  drawList = function(self)
+    term.setBackgroundColor(colors.gray)
+    term.setTextColor(colors.black)
+    for i = 0, self.table.len() do
+      term.setCursorPos(self.x, self.y + i + 1)
+      opt = ""
+      for ch = 1, self.lr-self.table[i+1].len() do
+	opt = opt .. " "
+      end
+      write(self.table[i+1] .. opt)
+    end
+  end
+  
+  display = function(self)
+    term.setCursorPos(self.x, self.y)
+    term.setBackgroundColor(self.c)
+    term.setTextColor(colors.black)
+    write(self.str)
+  end,
+  
+  update = function(self, e, a1, a2, a3)
+    if e == "mouse_click" and a1 == 1 then
+      if self:isInButton(a2, a3) then
+	if self.active then
+	  self.active = false
+	else
+	  self.active = true
+	end
+	return true
+      end
+      if self.active then
+	this:drawList()
+	if a2 >= self.x and a2 < self.x+self.lr and a3 >= self.y+1 and a3 < self.y+#self.table then
+	  self.sel = a3 - self.y + 1
+	  return true
+	end
+      else this.sel = -1 end
+    end
+    return false
+  end,
+
+}
+
+local DDButton_mt = {
+  __index = DDButton,
+}
+
+function new(x, y, str, c, table, l)
+  local b = {
+    x = x or 0,
+    y = y or 0,
+    str = str or "",
+    c = c or 0,
+    draw = draw or nil,
+    table = table or {},
+    lr = l or 1,
+    sel = -1,
+    active = false
+  }
+  setmetatable(b, DDButton_mt)
+  return b
+end

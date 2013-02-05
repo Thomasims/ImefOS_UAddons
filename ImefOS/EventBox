@@ -1,0 +1,28 @@
+local EventBox = {
+  display = function(self)
+    
+  end,
+  
+  update = function(self, e, a1, a2, a3)
+    self.e = e
+    self.a1 = a1
+    self.a2 = a2
+    self.a3 = a3
+    return true
+  end
+}
+
+local EventBox_mt = {
+  __index = EventBox,
+}
+
+function new()
+  local t = {
+    e = "",
+    a1 = "",
+    a2 = "",
+    a3 = ""
+  }
+  setmetatable(t, EventBox_mt)
+  return t
+end

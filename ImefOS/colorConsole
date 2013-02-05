@@ -1,0 +1,77 @@
+function cut(str, len)
+  local returned = {}
+  local lastT = 1
+  for i = 1, str:len() do
+    if i == len+lastT then
+      returned[#returned + 1] = str:sub(lastT, i -1 )
+      lastT = i
+    end
+  end
+  returned[#returned+1] = str:sub(lastT, str:len())
+  return returned
+end
+
+local colorCon = {
+
+  addMessage = function(self, strs, clrs)
+    local totStr = ""
+    for k = 1, strs do
+      totStr = totStr..strs[k]
+    end
+    local linesN = math.ceil(totStr:len() / self.w)
+    local lines = cut(totStr, self.w)
+    for i = 1, #lines do
+      msgs[#msgs+1] = lines[i]
+      if #t == self.h then
+	for j = 1, #t do
+	  t[j] = t[j+1]
+	end
+      end
+      local ttl = self.w - (strs[1]:len() + strs[2]:len())
+      if i == 1 then
+	t[#t] = {strs[1],strs[2],strs[3]:sub((strs[1]:len() + strs[2]:len() ) + 1, strs[3], ttl + 1)}
+	tC[#tC] = clrs
+      else
+	t[#t] = {strs[3]:sub(ttl + 2, (ttl + 1) + self.w)}
+	tC[#tC] = {clrs[3]}
+      end
+    end
+  end,
+
+  display = function(self)
+    term.setBackgroundColor(self.backC)
+    for i = 1, self.h do
+      local lastT = 1
+      for j = 1, self.t[i] do
+	term.setTextColor(self.tC[i][j])
+	term.setCursorPos(self.x+lastT-1,self.y+i-1)
+	term.write(self.t[i][j])
+	lastT = lastT + self.t[i][j]:len()
+      end
+    end
+  end,
+  
+  update = function(self, e, a1, a2, a3)
+    return true
+  end,
+
+}
+
+local colorCon_mt = {
+  __index = colorCon,
+}
+
+function new(x, y, w, h, c)
+  local l = {
+    x = x or 0,
+    y = y or 0,
+    w = w or 0,
+    h = h or 0,
+    t = {},
+    tC = {},
+    backC = c,
+    msgs = {}
+  }
+  setmetatable(l, colorCon_mt)
+  return l
+end

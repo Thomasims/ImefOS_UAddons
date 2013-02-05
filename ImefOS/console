@@ -1,0 +1,32 @@
+local console = {
+  call = function(self, str, f, ...)
+    returns = {pcall(f,...)}
+    if not returns[1] then
+      local consoleMessage = "["..str.."]["..tostring(getfenv(f)).."] "..returns[2]
+      rednet.send(self.conID, consoleMessage)
+    else
+      for i = 1, #returns do
+        returns[i] = returns[i+1]
+      end
+      return unpack(returns)
+    end
+    return unpack(returns)
+  end,
+
+  setConsole = function(self,id)
+    self.conID = id
+  end
+}
+
+local conMT = {
+  __index = console,
+}
+
+function new(rednets, conID)
+  local l = {
+    conID = conID or 0
+  }
+  rednet.open(rednets)
+  setmetatable(l, conMT)
+  return l
+end
