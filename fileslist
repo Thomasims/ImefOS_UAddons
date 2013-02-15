@@ -1,9 +1,1 @@
-#%TOOLS%#
-colorConsole
-console
-DDButton
-EventBox
-viewZone
-#%APPS%#
-TTUpdater.app
-IRC.app
+ImefOS/colorConsole(&@)ImefOS/console(&@)ImefOS/DDButton(&@)ImefOS/EventBox(&@)ImefOS/viewZone(&@)Applications/TTUpdater.app(&@)Applications/IRC.app
